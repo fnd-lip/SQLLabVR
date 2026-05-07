@@ -1,0 +1,37 @@
+# Pastas geradas automaticamente pelo Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Arquivos do Visual Studio / VS Code / IDEs
+.vs/
+.vscode/
+.idea/
+
+# Arquivos de solução e projeto gerados automaticamente
+*.csproj
+*.sln
+*.slnx
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+
+# Arquivos de log
+*.log
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Capturas e gravações
+MemoryCaptures/
+Recordings/
