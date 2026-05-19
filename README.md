@@ -4,35 +4,56 @@
 
 Felipe Barbosa
 
-## Apresentando o Projeto
+## Apresentação do Projeto
 
-O SQL Lab VR é uma experiência interativa criada no Unity.
+O **SQL Lab VR** é uma experiência interativa criada no Unity com foco em realidade virtual e educação.
 
-O projeto representa uma sala simples de treinamento em SQL com chão, paredes, mesa, tela, objetos que representam tabelas de banco de dados e um botão SELECT.
+O projeto representa um laboratório de treinamento em SQL onde o usuário pode explorar uma sala virtual com mesas, cadeiras, notebooks, servidor, painéis de banco de dados e um botão interativo chamado **SELECT**.
 
-Ao clicar no botão SELECT, aparece uma consulta SQL com um resultado fictício.
+A ideia principal é transformar um conteúdo teórico, como uma consulta SQL em uma experiência visual e interativa dentro de um ambiente virtual.
 
-## Contexto e Objetivos
+## Contexto e Objetivo
 
-O projeto está relacionado ao Metaverso aplicado a educação.
+O projeto está relacionado ao uso do **Metaverso aplicado à educação**.
 
-O objetivo é mostrar de forma visual e interativa, como uma consulta SQL pode ser representada em um ambiente virtual.
+O objetivo é apresentar de forma simples e visual, como uma consulta SQL pode ser representada em um ambiente VR. Em vez de mostrar apenas o código em uma tela comum, o usuário entra em uma sala de laboratório e interage com elementos que representam tabelas, consultas e resultados de banco de dados.
+
+## Ambiente Virtual
+
+A cena foi construída como uma sala/laboratório de SQL. O ambiente possui:
+
+- chão e paredes;
+- skybox customizado;
+- mesas de laboratório;
+- cadeiras;
+- notebooks;
+- servidor;
+- roteador;
+- extintor;
+- copo de café;
+- painéis com tabelas SQL;
+- painel com consulta `SELECT`;
+- painel de resultado da consulta.
+
+Também foram utilizados assets importados para deixar o cenário mais completo e parecido com um laboratório de tecnologia.
 
 ## Interação Implementada
 
-A interação foi feita em C#.
+A interação principal foi feita em C#.
 
-Ao clicar no botão SELECT:
+Ao clicar no botão **SELECT**:
 
-- o botão muda de cor;
-- a tabela `usuarios` fica destacada;
-- aparece o resultado da consulta SQL.
+- o botão muda de cor
+- a tabela `usuarios` fica destacada
+- aparece um painel com o resultado fictício da consulta SQL
 
 Consulta representada:
 
 ```sql
 SELECT * FROM usuarios;
 ```
+
+Além disso, o objeto `Copo_Cafe_01` foi configurado com **Grab Interaction** usando o Meta XR Interaction SDK para representar uma interação de pegar objetos em VR.
 
 ## Controles
 
@@ -42,38 +63,67 @@ SELECT * FROM usuarios;
 - `D` — mover para a direita;
 - Mouse — olhar ao redor;
 - `Esc` — liberar o cursor;
-- Clique no botão `SELECT` — executar a consulta;
-- `Ctrl + P` — iniciar ou parar o Play no Unity.
+- Clique no botão `SELECT` — executar a consulta SQL;
+- `Ctrl + P` — iniciar ou parar o Play Mode no Unity.
 
 ## Configuração Técnica
 
-- Unity 6.3 LTS
-- Meta XR SDK instalado
-- XR Plugin Management configurado
-- OpenXR ativado
-- Build Profile configurado para Android
-- Cena `SalaSQLVR` adicionada na lista de build
+O projeto foi configurado com:
+
+- Unity 6.3 LTS;
+- Meta XR All-in-One SDK;
+- OpenXR ativado;
+- XR Plug-in Management configurado;
+- Meta Quest Support habilitado;
+- Build Profile configurado para Android;
+- Meta XR Simulator testado no Editor;
+- cena `SalaSQLVR` configurada no projeto.
+
+## Organização da Cena
+
+A Hierarchy foi organizada com GameObjects vazios para separar os elementos principais da cena:
+
+- `Ambiente`;
+- `Objetos_SQL`;
+- `Interacao`;
+- `UI`;
+- `Player`;
+- `Iluminacao`;
+- `Player_MetaRig`;
+- `SQL_Paineis`;
+- `Laboratorio_Assets`.
+
+Essa organização facilita a manutenção do projeto e deixa os objetos mais fáceis de localizar.
 
 ## Processo de Criação e Dificuldades
 
-A cena foi criada com objetos 3D básicos do Unity como cubos para chão, paredes, mesa, botão e tabelas.
+Durante o desenvolvimento, a principal dificuldade foi transformar SQL que é um assunto mais teórico em algo visual dentro de um ambiente virtual.
 
-A principal dificuldade foi transformar SQL que é um assunto teórico em algo visual. Para resolver isso a consulta foi representada por um botão interativo e um painel de resultado.
+Para resolver isso, a consulta SQL foi representada por meio de painéis, tabelas e um botão interativo. Assim, o usuário consegue visualizar a ideia de executar uma consulta e receber um resultado.
+
+Também houve dificuldade na configuração do Meta XR SDK, OpenXR e Meta XR Simulator. O simulador foi testado no Editor e reconheceu o ambiente VR, os controles virtuais e o Camera Rig da Meta.
 
 ## Tecnologias Utilizadas
 
-- Unity
-- C#
-- TextMeshPro
-- Meta XR SDK
-- OpenXR
-
+- Unity;
+- C#;
+- TextMeshPro;
+- Meta XR SDK;
+- Meta XR Interaction SDK;
+- OpenXR;
+- Meta XR Simulator;
+- Git e GitHub.
 
 ## Como Executar
 
 1. Baixe ou clone este repositório.
 2. Abra o projeto no Unity.
 3. Abra a cena `SalaSQLVR`.
-4. Aperte Play.
-5. Use WASD e mouse para se movimentar.
-6. Clique no botão SELECT para executar a interação.
+4. Verifique se o Build Profile está configurado para Android.
+5. Aperte Play no Unity.
+6. Use WASD e mouse para se movimentar.
+7. Clique no botão `SELECT` para executar a interação SQL.
+
+## Observação
+
+O projeto foi desenvolvido como uma primeira experiência VR interativa. O foco principal foi criar um ambiente simples, organizado e funcional, utilizando Unity, Meta XR SDK e interações básicas em realidade virtual.
