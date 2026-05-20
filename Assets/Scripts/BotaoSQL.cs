@@ -7,7 +7,8 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// Controla a interação do botão SELECT na sala SQL.
 /// Quando o usuário clica no botão, o painel de resultado aparece,
-/// o botão muda de cor e a tabela consultada fica destacada.
+/// o botão muda de cor, a tabela consultada fica destacada
+/// e a luz do servidor acende para simular o processamento da consulta.
 /// </summary>
 public class BotaoSQL : MonoBehaviour
 {
@@ -25,17 +26,39 @@ public class BotaoSQL : MonoBehaviour
     public Color corBotaoAtivo = Color.green;
     public Color corTabelaAtiva = Color.cyan;
 
+    [Header("Luz de status do servidor")]
+    public Renderer luzServidorRenderer;
+    public Material materialLuzDesligada;
+    public Material materialLuzAtiva;
+    public Light luzServidorPoint;
+
+    [Header("Câmera usada para detectar o clique")]
+    public Camera cameraClique;
+
+    [Header("Configuração do clique")]
+    public bool usarCentroDaTela = true;
+    public float distanciaClique = 100f;
+
     private bool consultaAtiva = false;
     private Color corOriginalTabela;
     private Camera cameraPrincipal;
 
     void Start()
     {
-        cameraPrincipal = Camera.main;
-
-        if (cameraPrincipal == null)
+        // Usa a câmera definida manualmente no Inspector.
+        // Se não tiver câmera definida, tenta encontrar uma câmera automaticamente.
+        if (cameraClique != null)
         {
-            cameraPrincipal = FindFirstObjectByType<Camera>();
+            cameraPrincipal = cameraClique;
+        }
+        else
+        {
+            cameraPrincipal = Camera.main;
+
+            if (cameraPrincipal == null)
+            {
+                cameraPrincipal = FindFirstObjectByType<Camera>();
+            }
         }
 
         if (painelResultado != null)
@@ -52,6 +75,9 @@ public class BotaoSQL : MonoBehaviour
         {
             corOriginalTabela = tabelaUsuarios.material.color;
         }
+
+        // Garante que a luz do servidor começa desligada.
+        AtualizarLuzServidor(false);
     }
 
     void Update()
@@ -93,8 +119,8 @@ public class BotaoSQL : MonoBehaviour
     }
 
     /// <summary>
-    /// Faz um Raycast da câmera até a posição do mouse.
-    /// Se o Raycast acertar este botão, a consulta é ativada.
+    /// Faz um Raycast para detectar se o usuário clicou no botão SELECT.
+    /// No modo VR, usar o centro da tela costuma funcionar melhor do que usar a posição exata do mouse.
     /// </summary>
     void VerificarCliqueNoBotao(Vector2 posicaoMouse)
     {
@@ -104,14 +130,27 @@ public class BotaoSQL : MonoBehaviour
             return;
         }
 
-        Ray raio = cameraPrincipal.ScreenPointToRay(posicaoMouse);
+        Ray raio;
+
+        if (usarCentroDaTela)
+        {
+            // Raycast saindo do centro da câmera, como se o usuário estivesse olhando para o botão.
+            raio = new Ray(cameraPrincipal.transform.position, cameraPrincipal.transform.forward);
+        }
+        else
+        {
+            // Raycast tradicional usando a posição do mouse.
+            raio = cameraPrincipal.ScreenPointToRay(posicaoMouse);
+        }
+
         RaycastHit hit;
 
-        if (Physics.Raycast(raio, out hit, 100f))
+        if (Physics.Raycast(raio, out hit, distanciaClique))
         {
             Debug.Log("Clique acertou o objeto: " + hit.collider.gameObject.name);
 
-            if (hit.collider.gameObject == gameObject)
+            // Aceita clique no próprio botão ou em algum objeto filho dele.
+            if (hit.collider.gameObject == gameObject || hit.collider.transform.IsChildOf(transform))
             {
                 AlternarConsulta();
             }
@@ -120,6 +159,7 @@ public class BotaoSQL : MonoBehaviour
 
     /// <summary>
     /// Ativa ou desativa o resultado da consulta SQL.
+    /// Também altera o botão, a tabela consultada e a luz do servidor.
     /// </summary>
     void AlternarConsulta()
     {
@@ -138,6 +178,34 @@ public class BotaoSQL : MonoBehaviour
         if (tabelaUsuarios != null)
         {
             tabelaUsuarios.material.color = consultaAtiva ? corTabelaAtiva : corOriginalTabela;
+        }
+
+        // Acende ou apaga a luz do servidor conforme o estado da consulta.
+        AtualizarLuzServidor(consultaAtiva);
+    }
+
+    /// <summary>
+    /// Controla a luz visual do servidor.
+    /// Quando a consulta é executada, a luz fica verde e a Point Light acende.
+    /// Quando a consulta é desativada, a luz volta para o material desligado.
+    /// </summary>
+    void AtualizarLuzServidor(bool ativa)
+    {
+        if (luzServidorRenderer != null)
+        {
+            if (ativa && materialLuzAtiva != null)
+            {
+                luzServidorRenderer.material = materialLuzAtiva;
+            }
+            else if (!ativa && materialLuzDesligada != null)
+            {
+                luzServidorRenderer.material = materialLuzDesligada;
+            }
+        }
+
+        if (luzServidorPoint != null)
+        {
+            luzServidorPoint.gameObject.SetActive(ativa);
         }
     }
 }
