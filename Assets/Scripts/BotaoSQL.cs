@@ -36,7 +36,7 @@ public class BotaoSQL : MonoBehaviour
     public Camera cameraClique;
 
     [Header("Configuração do clique")]
-    public bool usarCentroDaTela = true;
+    public bool usarCentroDaTela = false;
     public float distanciaClique = 100f;
 
     private bool consultaAtiva = false;
